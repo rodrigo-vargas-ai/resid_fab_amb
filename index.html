@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <title>Tipos Residenciales - AMB</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+  <style>
+      body { margin:0; 
+        padding:0; 
+        font-family: helvetica; 
+        font-size: 14px; 
+      }
+      #map { position:absolute; top:0; bottom:0; width:100%; }
+    li {
+      padding:3px 0;
+    }
+    #panel{
+      background: white;
+      width: 300px; 
+      border: 1px solid rgba(0,0,0,0.05);
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+      color: rgba(0,0,0,0.5);
+    }
+    h4 {
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      margin: 0;
+      padding: 16px;   
+    }
+    ul{
+      list-style-type: none;
+      margin: 0;
+      padding: 16px;
+    }
+    ul span {
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      margin-right: 8px;
+      border-radius: 50%;
+    }
+    dd{
+      margin-left: 0;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    .mapboxgl-popup-content{
+      font-size: 14px;
+      color: rgba(0,0,0,0.5);
+      min-width: 250px;
+      max-width: 400px;
+      box-shadow: 0 0 4px 0 rgba(0,0,0,0.1);
+    }
+    dl{
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+ 
+<div id='map'></div>
+  
+  <div id="panel" style="">
+    <h4>Tejido residencial - AMB</h4>
+    <ul>
+      <li><span style="background:#f9eddb;"></span>Unifamiliar</li>
+      <li><span style="background:#f6d9cb;"></span>Residencial Colectivo</li>
+      <li><span style="background:#f1b89c;"></span>Residencial Mixto</li>
+      <li><span style="background:#ffffff; border: 1px solid #ccc; box-sizing: border-box;"></span>Otros Usos // Sin Datos</li>
+    </ul>
+  </div>
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoicm9kcmlnb2JjbmVjb2xvZ2lhIiwiYSI6ImNqczRjbTF2YTAzY3Y0M2x4Nmh1cWM4NGoifQ.yFnumA_xNiN3_rVlCGnH_g';
+    var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/rodrigobcnecologia/cjsdawrnf0gru1fpq9l2syv9y', // stylesheet location
+    center: [2.177,41.382], // starting position [lng, lat]
+    zoom: 14, // starting zoom
+    minZoom: 14,
+    maxZoom: 18,
+    hash: true
+    });
+
+    var nav = new mapboxgl.NavigationControl();
+    map.addControl(nav, 'top-left');
+    /*
+    function onClick(event) {
+        console.log('Mouse Clicked');
+        console.log(event.point);
+    }
+    map.on('click', onClick);*/
+
+    map.on('mousemove', function (event) {
+     // console.log(event);
+      var features = map.queryRenderedFeatures(event.point, {
+        layers: ['parcelario-amb']
+      });
+      map.getCanvas().style.cursor = (features.length) ? 'pointer':'';
+    });
+
+    map.on('click', function(event) {
+         //console.log('Mouse Clicked');
+         //console.log(event.point);
+
+         var geometry = event.point;
+         var parameters = {
+             layers: ['parcelario-amb']
+         };
+         var features = map.queryRenderedFeatures(geometry, parameters);
+         //console.log(features);
+         //console.log(features.length + ' features');
+         var index = features[0];
+         console.log(index);
+
+        if (features.length) { 
+          var REFCAT = index.properties.REFCAT || '—' ;
+          var LAND_USE = index.properties.LAND_USE || 'OTROS USOS / SIN DATOS';
+          var AREA = index.properties.AREA || '—';
+          var NUM_HABITA = index.properties.NUM_HABITA || '—';
+          console.log(REFCAT, LAND_USE, AREA);
+
+          var popup = new mapboxgl.Popup()
+              .setLngLat(event.lngLat)
+              .setHTML('<dl>' +
+                  '<dt>REFCAT</dt>' +
+                  '<dd>' + REFCAT + '</dd>' +
+                  '<dt>LAND_USE</dt>' +
+                  '<dd>' + LAND_USE + '</dd>' +
+                  '<dt>AREA</dt>' +
+                  '<dd>' + AREA + '</dd>' +
+                  '<dt>NUM_HABITA</dt>' +
+                  '<dd>' + NUM_HABITA + '</dd>' +
+              '</dl>')
+              .addTo(map);
+        } 
+      });
+  </script>
+ 
+</body>
+</html>
