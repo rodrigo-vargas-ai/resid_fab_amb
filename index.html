@@ -78,10 +78,10 @@
   <script>
     mapboxgl.accessToken = 'pk.eyJ1Ijoicm9kcmlnb2JjbmVjb2xvZ2lhIiwiYSI6ImNqczRjbTF2YTAzY3Y0M2x4Nmh1cWM4NGoifQ.yFnumA_xNiN3_rVlCGnH_g';
     var map = new mapboxgl.Map({
-    container: 'map', // container id
-    style: 'mapbox://styles/rodrigobcnecologia/cjsdawrnf0gru1fpq9l2syv9y', // stylesheet location
-    center: [2.177,41.382], // starting position [lng, lat]
-    zoom: 14, // starting zoom
+    container: 'map',
+    style: 'mapbox://styles/rodrigobcnecologia/cjsdawrnf0gru1fpq9l2syv9y',
+    center: [2.177,41.382], 
+    zoom: 14, 
     minZoom: 14,
     maxZoom: 18,
     hash: true
@@ -89,15 +89,10 @@
 
     var nav = new mapboxgl.NavigationControl();
     map.addControl(nav, 'top-left');
-    /*
-    function onClick(event) {
-        console.log('Mouse Clicked');
-        console.log(event.point);
-    }
-    map.on('click', onClick);*/
+  
 
     map.on('mousemove', function (event) {
-     // console.log(event);
+
       var features = map.queryRenderedFeatures(event.point, {
         layers: ['parcelario-amb']
       });
@@ -105,16 +100,13 @@
     });
 
     map.on('click', function(event) {
-         //console.log('Mouse Clicked');
-         //console.log(event.point);
 
          var geometry = event.point;
          var parameters = {
              layers: ['parcelario-amb']
          };
          var features = map.queryRenderedFeatures(geometry, parameters);
-         //console.log(features);
-         //console.log(features.length + ' features');
+
          var index = features[0];
          console.log(index);
 
