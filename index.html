@@ -7,6 +7,8 @@
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+
+  <!--- config navigation panel  --->
   <style>
       body { margin:0; 
         padding:0; 
@@ -63,10 +65,10 @@
   </style>
 </head>
 <body>
- 
+<!-- Config Map window and map tools-->
 <div id='map'></div>
-  
-  <div id="panel" style="">
+  <!-- Config info Panel-->
+  <div id="panel">
     <h4>Tejido residencial - AMB</h4>
     <ul>
       <li><span style="background:#f9eddb;"></span>Unifamiliar</li>
@@ -75,7 +77,9 @@
       <li><span style="background:#ffffff; border: 1px solid #ccc; box-sizing: border-box;"></span>Otros Usos // Sin Datos</li>
     </ul>
   </div>
-  <script>
+  
+  <!-- Config Map window and map tools-->
+  <script> // map window config
     mapboxgl.accessToken = 'pk.eyJ1Ijoicm9kcmlnb2JjbmVjb2xvZ2lhIiwiYSI6ImNqczRjbTF2YTAzY3Y0M2x4Nmh1cWM4NGoifQ.yFnumA_xNiN3_rVlCGnH_g';
     var map = new mapboxgl.Map({
     container: 'map',
@@ -87,10 +91,11 @@
     hash: true
     });
 
+    // config mouse controls and info pop-up window 
+
     var nav = new mapboxgl.NavigationControl();
     map.addControl(nav, 'top-left');
   
-
     map.on('mousemove', function (event) {
 
       var features = map.queryRenderedFeatures(event.point, {
